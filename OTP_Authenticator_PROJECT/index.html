@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Authenticator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f3f4f6;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OTP Authenticator</h1>
+        <button onclick="generateOTP()">Generate OTP</button>
+        <br>
+        <input type="text" id="otpInput" placeholder="Enter OTP">
+        <button onclick="verifyOTP()">Verify OTP</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function generateOTP() {
+            const response = await fetch('/generate');
+            const data = await response.json();
+            document.getElementById('result').innerText = data.message;
+        }
+
+        async function verifyOTP() {
+            const otp = document.getElementById('otpInput').value;
+            const response = await fetch('/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp })
+            });
+            const data = await response.json();
+            document.getElementById('result').innerText = data.message;
+        }
+    </script>
+</body>
+</html>
